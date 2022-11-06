@@ -6,13 +6,14 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:08:36 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/06 20:08:36 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/06 21:09:53 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "../minitalk.h"
 
-int main	void()
+int	server_func(void)
 {
-	return ;
+	ft_printf("server_tools speaking\n");
+	return (0);
 }

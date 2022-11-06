@@ -13,26 +13,26 @@ CL_SOURCES = mt_client.c \
 		mt_client_utils/mt_client_tools.c
 SV_SOURCES = mt_server.c \
 		mt_server_utils/mt_server_tools.c 
-CL_OBJECTS = $(CL_SRCS:%.c=%.o)
-SV_OBJECTS = $(SV_SRCS:%.c=%.o)
+CL_OBJECTS = $(CL_SOURCES:%.c=%.o)
+SV_OBJECTS = $(SV_SOURCES:%.c=%.o)
 
+
+%.o: %.c
+	$(CC) -c $< -o $(<:%.c=%.o) -I$(LIBFT)
 
 all: $(CL_NAME) $(SV_NAME)
 
 $(CL_NAME): $(LIBFT) $(CL_OBJECTS)
-	$(CC) -o $(CL_NAME) $(CL_OBJECTS) -l$(libft)
+	$(CC) -o $(CL_NAME) $(CL_OBJECTS) -L$(LIBFT_PATH) -lft
 
 $(SV_NAME): $(LIBFT) $(SV_OBJECTS)
-	$(CC) -o $(SV_NAME) $(SV_OBJECTS) -l$(libft)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $(<:%.c=%.o) -I/usr/include -I$(LIBFT_PATH)
+	$(CC) -o $(SV_NAME) $(SV_OBJECTS) -L$(LIBFT_PATH) -lft
 
 $(LIBFT):
 	make -C $(LIBFT_PATH)
 
 clean: all
-	$(RM) $(OBJECTS)
+	$(RM) $(CL_OBJECTS) $(SV_OBJECTS)
 	make -C $(LIBFT_PATH) clean
 
 fclean: clean
