@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   minitalk_bonus.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:06:02 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/07 01:19:42 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/07 02:00:25 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#ifndef MINITALK_BONUS_H
+# define MINITALK_BONUS_H
 
-# include "libft/libft_gnl_printf.h"
-# include <signal.h>
+# include "minitalk.h"
 
-// CLIENT
+// BONUS CLIENT
 int	client_func(void);
-// SERVER
+// BONUS SERVER
 int	server_func(void);
 
 #endif
