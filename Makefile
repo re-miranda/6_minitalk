@@ -29,7 +29,7 @@ HEADER_BONUS = minitalk_bonus.h
 %.o: %.c
 	$(CC) -c $< -o $(<:%.c=%.o) -I$(LIBFT)
 
-all: $(CL_NAME) $(SV_NAME) $(HEADER)
+all: $(CL_NAME) $(SV_NAME)
 
 $(CL_NAME): $(LIBFT) $(CL_OBJECTS)
 	$(CC) -o $(CL_NAME) $(CL_OBJECTS) -L$(LIBFT_PATH) -lft
@@ -37,7 +37,7 @@ $(CL_NAME): $(LIBFT) $(CL_OBJECTS)
 $(SV_NAME): $(LIBFT) $(SV_OBJECTS)
 	$(CC) -o $(SV_NAME) $(SV_OBJECTS) -L$(LIBFT_PATH) -lft
 
-bonus: $(CL_NAME_BONUS) $(SV_NAME_BONUS) $(HEADER_BONUS)
+bonus: $(CL_NAME_BONUS) $(SV_NAME_BONUS)
 
 $(CL_NAME_BONUS): $(LIBFT) $(CL_OBJECTS_BONUS)
 	$(CC) -o $(CL_NAME_BONUS) $(CL_OBJECTS_BONUS) -L$(LIBFT_PATH) -lft
