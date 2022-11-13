@@ -6,46 +6,38 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 05:53:59 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/13 05:54:00 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/13 06:27:28 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-int	g_buffer;
+t_mtdata	g_data;
 
 void	caught_sig(int n)
 {
-	static int	i;
-	static int	pid;
-
 	if (n == SIGUSR1)
-		g_buffer &= ~1;
+		g_data.buffer &= ~1;
 	else
-		g_buffer |= 1;
-	usleep(10);
-	if (pid)
+		g_data.buffer |= 1;
+	if (g_data.pid)
 	{
-		if (i++ == 7)
+		if (g_data.i++ == 7)
 		{
-			i = 0;
-			write(1, (char *)&g_buffer, 1);
+			g_data.i = 0;
+			write(1, (char *)&g_data.buffer, 1);
 		}
-		if (kill(pid, SIGUSR1))
-			pid = 0;
+		usleep(15);
+		if (kill(g_data.pid, SIGUSR1))
+			g_data.pid = 0;
 	}
-	else if (i++ == 31)
+	else if (g_data.i++ == 31)
 	{
-		pid = g_buffer;
-		if (kill(pid, 0))
-			pid = 0;
-		else
-		{
-			i = 0;
-			kill(pid, SIGUSR1);
-		}
+		g_data.pid = g_data.buffer;
+		g_data.i = 0;
+		kill(g_data.pid, SIGUSR1);
 	}
-	g_buffer = g_buffer << 1;
+	g_data.buffer = g_data.buffer << 1;
 }
 
 int	main(void)
@@ -55,6 +47,8 @@ int	main(void)
 	psa.sa_handler = caught_sig;
 	sigaction(SIGUSR1, &psa, NULL);
 	sigaction(SIGUSR2, &psa, NULL);
+	g_data.i = 0;
+	g_data.pid = 0;
 	ft_printf("Server PID: %i\n", getpid());
 	while (1)
 		pause();
