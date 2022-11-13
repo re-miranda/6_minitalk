@@ -6,7 +6,7 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:05:53 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/13 03:44:59 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/13 04:11:23 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	caught_sig(int n)
 		if (i++ == 7)
 		{
 			i = 0;
-			write(1, (((char *)&buffer) + 3), 1);
+			write(1, (char *)&buffer, 1);
 		}
 		if (kill(pid, SIGUSR1))
 			pid = 0;
