@@ -6,14 +6,29 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:08:36 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/06 21:09:53 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/09 10:01:08 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minitalk.h"
 
-int	server_func(void)
+void	server_func(void)
 {
-	ft_printf("server_tools speaking\n");
-	return (0);
+	return ;
+}
+
+void	set_bit(char byte, int position)
+{
+	char mask;
+
+	mask = 1<<position;
+	byte = byte | mask;
+}
+
+void	clear_bit(char byte, int position)
+{
+	char mask;
+
+	mask = 1<<position;
+	byte = byte & ~mask;
 }
