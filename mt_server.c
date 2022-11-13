@@ -6,7 +6,7 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 05:53:59 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/13 06:27:28 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/13 06:39:29 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	caught_sig(int n)
 			g_data.i = 0;
 			write(1, (char *)&g_data.buffer, 1);
 		}
-		usleep(15);
+		usleep(USLEEP_AMOUNT);
 		if (kill(g_data.pid, SIGUSR1))
 			g_data.pid = 0;
 	}

@@ -6,7 +6,7 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 05:53:54 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/13 06:27:40 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/13 06:39:21 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	client_func(unsigned int n, char *c)
 	(void)n;
 	while (i--)
 	{
-		usleep(15);
+		usleep(USLEEP_AMOUNT);
 		if (*c & 1 << i)
 			kill(g_pid, SIGUSR2);
 		else
