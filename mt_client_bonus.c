@@ -6,7 +6,7 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 20:03:31 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/13 06:43:11 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/13 06:47:24 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,3 @@ int	main(int argc, char *argv[])
 	ft_printf("Message sent.\n");
 	return (0);
 }
-
