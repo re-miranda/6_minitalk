@@ -5,32 +5,29 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/06 20:03:31 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/13 03:49:35 by rmiranda         ###   ########.fr       */
+/*   Created: 2022/11/13 05:53:54 by rmiranda          #+#    #+#             */
+/*   Updated: 2022/11/13 05:53:55 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
+pid_t	g_pid;
 
-pid_t	pid;
-
-static pid_t	validate_arguments(int argc, char *argv[])
+void	validate_arguments(int argc, char *argv[])
 {
-	pid_t	pid;
-
 	if (argc != 3)
 	{
 		ft_printf("Usage: ./client PID \"string\"\n");
 		exit(2);
 	}
-	pid = ft_atoi(argv[1]);
-	if (kill(pid, 0))
+	g_pid = ft_atoi(argv[1]);
+	if (kill(g_pid, 0))
 	{
 		ft_printf("Error: Invalid PID\n");
 		exit(1);
 	}
-	return (pid);
+	return ;
 }
 
 void	client_func(unsigned int n, char *c)
@@ -41,11 +38,11 @@ void	client_func(unsigned int n, char *c)
 	(void)n;
 	while (i--)
 	{
-		usleep(10000);
-		if (*c & 1<<i)
-			kill(pid, SIGUSR2);
+		usleep(10);
+		if (*c & 1 << i)
+			kill(g_pid, SIGUSR2);
 		else
-			kill(pid, SIGUSR1);
+			kill(g_pid, SIGUSR1);
 		pause();
 	}
 	return ;
@@ -56,14 +53,13 @@ void	transmit_pid(int server_pid)
 	int	i;
 
 	i = 32;
-	ft_printf("(%i)", server_pid);
 	while (i--)
 	{
 		usleep(100000);
-		if (server_pid & 1<<i)
-			kill(pid, SIGUSR2);
+		if (server_pid & 1 << i)
+			kill(g_pid, SIGUSR2);
 		else
-			kill(pid, SIGUSR1);
+			kill(g_pid, SIGUSR1);
 	}
 	pause();
 }
@@ -80,7 +76,7 @@ int	main(int argc, char *argv[])
 
 	psa.sa_handler = caught_sig;
 	sigaction(SIGUSR1, &psa, NULL);
-	pid = validate_arguments(argc, argv);
+	validate_arguments(argc, argv);
 	transmit_pid(getpid());
 	ft_striteri(argv[2], client_func);
 	client_func(0, "\n");
