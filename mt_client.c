@@ -6,7 +6,7 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 05:53:54 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/14 06:04:45 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/14 10:59:24 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,12 @@
 
 pid_t	g_pid;
 
-void	validate_arguments(int argc, char *argv[])
-{
-	if (argc != 3)
-	{
-		ft_printf("Usage: ./client PID \"string\"\n");
-		exit(2);
-	}
-	g_pid = ft_atoi(argv[1]);
-	if (kill(g_pid, 0))
-	{
-		ft_printf("Error: Invalid PID\n");
-		exit(1);
-	}
-	return ;
-}
-
-void	client_func(unsigned int n, char *c)
+static void	client_func(unsigned int n, char *c)
 {
 	int	i;
 
-	i = 8;
 	(void)n;
+	i = 8;
 	while (i--)
 	{
 		usleep(USLEEP_AMOUNT);
@@ -45,43 +29,48 @@ void	client_func(unsigned int n, char *c)
 			kill(g_pid, SIGUSR1);
 		pause();
 	}
-	return ;
 }
 
-void	transmit_pid(int server_pid)
-{
-	int	i;
-
-	i = 32;
-	while (i--)
-	{
-		usleep(SAFE_USLEEP_AMOUNT);
-		if (server_pid & 1 << i)
-			kill(g_pid, SIGUSR2);
-		else
-			kill(g_pid, SIGUSR1);
-	}
-	pause();
-}
-
-void	caught_sig(int n)
+static void	caught_sig(int n)
 {
 	(void)n;
+}
+
+static void	validate_arguments(int argc, char *argv[])
+{
+	if (argc != 3)
+	{
+		ft_printf("Usage: ./client PID \"string\"\n");
+		exit(1);
+	}
+	g_pid = ft_atoi(argv[1]);
+	if (kill(g_pid, 0))
+	{
+		ft_printf("Error: Invalid PID\n");
+		exit(2);
+	}
 	return ;
+}
+
+static struct sigaction	initialize_sigaction_struct(void)
+{
+	struct sigaction	action;
+
+	action.sa_handler = caught_sig;
+	sigemptyset(&action.sa_mask);
+	sigaddset(&action.sa_mask, SIGUSR1);
+	sigaction(SIGUSR1, &action, NULL);
+	return (action);
 }
 
 int	main(int argc, char *argv[])
 {
-	struct sigaction	psa;
+	struct sigaction	sigusr1_action;
 
-	psa.sa_handler = caught_sig;
-	sigaction(SIGUSR1, &psa, NULL);
+	sigusr1_action = initialize_sigaction_struct();
 	validate_arguments(argc, argv);
-	ft_printf("Establishing comunication...\n");
-	transmit_pid(getpid());
-	ft_printf("Sending message... ");
 	ft_striteri(argv[2], client_func);
 	client_func(0, "\n");
-	ft_printf("Done.\n");
+	ft_printf("Message sent.\n");
 	return (0);
 }

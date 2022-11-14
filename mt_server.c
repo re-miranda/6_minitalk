@@ -6,49 +6,52 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 05:53:59 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/13 06:39:29 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/14 10:59:46 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-t_mtdata	g_data;
-
-void	caught_sig(int n)
+static void	catch_sigusr_1_2(int n, siginfo_t *siginfo, void *context)
 {
+	static int	buffer;
+	static int	i;
+
+	(void)context;
 	if (n == SIGUSR1)
-		g_data.buffer &= ~1;
+		buffer &= ~1;
 	else
-		g_data.buffer |= 1;
-	if (g_data.pid)
+		buffer |= 1;
+	if (i++ == 7)
 	{
-		if (g_data.i++ == 7)
-		{
-			g_data.i = 0;
-			write(1, (char *)&g_data.buffer, 1);
-		}
-		usleep(USLEEP_AMOUNT);
-		if (kill(g_data.pid, SIGUSR1))
-			g_data.pid = 0;
+		i = 0;
+		write(1, (char *)&buffer, 1);
 	}
-	else if (g_data.i++ == 31)
-	{
-		g_data.pid = g_data.buffer;
-		g_data.i = 0;
-		kill(g_data.pid, SIGUSR1);
-	}
-	g_data.buffer = g_data.buffer << 1;
+	buffer <<= 1;
+	usleep(USLEEP_AMOUNT);
+	if (kill(siginfo->si_pid, SIGUSR1))
+		i = 0;
+}
+
+static struct sigaction	initialize_sigaction_struct(void)
+{
+	struct sigaction	action;
+
+	sigemptyset(&action.sa_mask);
+	sigaddset(&action.sa_mask, SIGUSR1);
+	sigaddset(&action.sa_mask, SIGUSR2);
+	action.sa_sigaction = catch_sigusr_1_2;
+	action.sa_flags = SA_SIGINFO;
+	sigaction(SIGUSR1, &action, NULL);
+	sigaction(SIGUSR2, &action, NULL);
+	return (action);
 }
 
 int	main(void)
 {
-	struct sigaction	psa;
+	struct sigaction	sigusr_1_2_action;
 
-	psa.sa_handler = caught_sig;
-	sigaction(SIGUSR1, &psa, NULL);
-	sigaction(SIGUSR2, &psa, NULL);
-	g_data.i = 0;
-	g_data.pid = 0;
+	sigusr_1_2_action = initialize_sigaction_struct();
 	ft_printf("Server PID: %i\n", getpid());
 	while (1)
 		pause();
