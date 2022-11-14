@@ -6,7 +6,7 @@
 /*   By: rmiranda <rmiranda@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/13 05:53:54 by rmiranda          #+#    #+#             */
-/*   Updated: 2022/11/13 06:39:21 by rmiranda         ###   ########.fr       */
+/*   Updated: 2022/11/14 06:04:45 by rmiranda         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	transmit_pid(int server_pid)
 	i = 32;
 	while (i--)
 	{
-		usleep(100000);
+		usleep(SAFE_USLEEP_AMOUNT);
 		if (server_pid & 1 << i)
 			kill(g_pid, SIGUSR2);
 		else
@@ -77,9 +77,11 @@ int	main(int argc, char *argv[])
 	psa.sa_handler = caught_sig;
 	sigaction(SIGUSR1, &psa, NULL);
 	validate_arguments(argc, argv);
+	ft_printf("Establishing comunication...\n");
 	transmit_pid(getpid());
+	ft_printf("Sending message... ");
 	ft_striteri(argv[2], client_func);
 	client_func(0, "\n");
-	ft_printf("Message sent.\n");
+	ft_printf("Done.\n");
 	return (0);
 }

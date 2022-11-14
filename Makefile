@@ -18,11 +18,10 @@ SV_SOURCES_BONUS = mt_server_bonus.c
 CL_OBJECTS_BONUS = $(CL_SOURCES_BONUS:%.c=%.o)
 SV_OBJECTS_BONUS = $(SV_SOURCES_BONUS:%.c=%.o)
 
-HEADER = minitalk.h
-HEADER_BONUS = minitalk_bonus.h
+HEADER = minitalk.h minitalk_bonus.h
 
 
-%.o: %.c
+%.o: %.c $(HEADER)
 	$(CC) -c $< -o $(<:%.c=%.o) -I$(LIBFT)
 
 all: $(CL_NAME) $(SV_NAME)
